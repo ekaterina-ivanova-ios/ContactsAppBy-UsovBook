@@ -4,6 +4,44 @@ import UIKit
 class ViewController: UIViewController {
     private var contacts = [ContactProtocol]()
     
+    @IBOutlet var tableView: UITableView!
+    @IBAction func showNewContactAlert() {
+        //создание алерт контролера
+        let alertController = UIAlertController(title: "Create new contact", message: "Enter name and phone number", preferredStyle: .alert)
+        
+        //добовляем первое текстовое поле в алерт контролер
+        alertController.addTextField{ textField in
+            textField.placeholder = "Name"
+        }
+        //добовляем второе текстовое поле в алерт контролер
+        alertController.addTextField{ textField in
+            textField.placeholder = "Phone number"
+        }
+        
+        //создаем кнопки
+        //кнопка создания контакта
+        let createButton = UIAlertAction(title: "Create", style: .default, handler: { _ in
+            guard let contactName = alertController.textFields?[0].text,
+                  let contactPhone = alertController.textFields?[1].text else {return}
+
+        
+        //создаем новый контакт
+        let contact = Contact(title: contactName, phoneNumber: contactPhone)
+        self.contacts.append(contact)
+        self.tableView.reloadData()
+        })
+        
+        //кнопка отмены
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        //добавляем кнопки в алерт контролер
+        alertController.addAction(cancelButton)
+        alertController.addAction(createButton)
+        
+        //отображаем алерт контролер
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadContacts()
@@ -83,4 +121,14 @@ extension ViewController {
     }
 }
 
-
+extension ViewController {
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        //delete cell
+        let actionDelete = UIContextualAction(style: .destructive, title: "Delete") { _,_,_ in
+            self.contacts.remove(at: indexPath.row)
+            tableView.reloadData()
+        }
+        let actions = UISwipeActionsConfiguration(actions: [actionDelete])
+    return actions
+    }
+}
