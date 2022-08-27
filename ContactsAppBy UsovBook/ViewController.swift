@@ -2,9 +2,14 @@
 import UIKit
 
 class ViewController: UIViewController {
-    private var contacts = [ContactProtocol]()
+    private var contacts: [ContactProtocol] = [] {
+        didSet {
+            contacts.sort { $0.title < $1.title }
+        }
+    }
     
     @IBOutlet var tableView: UITableView!
+    
     @IBAction func showNewContactAlert() {
         //создание алерт контролера
         let alertController = UIAlertController(title: "Create new contact", message: "Enter name and phone number", preferredStyle: .alert)
@@ -20,16 +25,15 @@ class ViewController: UIViewController {
         
         //создаем кнопки
         //кнопка создания контакта
-        let createButton = UIAlertAction(title: "Create", style: .default, handler: { _ in
+        let createButton = UIAlertAction(title: "Create", style: .default) { _ in
             guard let contactName = alertController.textFields?[0].text,
                   let contactPhone = alertController.textFields?[1].text else {return}
-
-        
-        //создаем новый контакт
-        let contact = Contact(title: contactName, phoneNumber: contactPhone)
-        self.contacts.append(contact)
-        self.tableView.reloadData()
-        })
+            
+            // создаем новый контакт
+            let contact = Contact(title: contactName, phoneNumber: contactPhone)
+            self.contacts.append(contact)
+            self.tableView.reloadData()
+        }
         
         //кнопка отмены
         let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -53,24 +57,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return contacts.count
     }
-    
-    //    //создание ячейки
-    //    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    //        //значение для параметра reuseIdentifier устанавливается на "contactCellIndetifier"(MyCell) для экономии ресурсов и использования возможности "переиспользования ячейки" и делаем проверку на наличие такой ячейки
-    //        guard var cell = tableView.dequeueReusableCell(withIdentifier: "MyCell") else {print("Create a new cell for row with index \(indexPath.row)")
-    //            var newCell = UITableViewCell(style: .default, reuseIdentifier: "MyCell")
-    //            //происходит конфигурация ячейки
-    //            var configuration = newCell.defaultContentConfiguration()
-    //            configure(cell: &newCell, for: indexPath)
-    ////            configuration.text = "Row \(indexPath.row)"
-    ////            newCell.contentConfiguration = configuration
-    //            return newCell
-    //        }
-    //        print("Use old cell for row with index \(indexPath.row)")
-    //        configure(cell: &cell, for: indexPath)
-    //        return cell
-    //    }
-    //}
     
     //вариант создание ячейки номер 2 без повторного использования return
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -132,3 +118,26 @@ extension ViewController {
     return actions
     }
 }
+
+
+
+/**
+ //создание ячейки
+ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+     //значение для параметра reuseIdentifier устанавливается на "contactCellIndetifier"(MyCell) для экономии ресурсов и использования возможности "переиспользования ячейки" и делаем проверку на наличие такой ячейки
+     guard var cell = tableView.dequeueReusableCell(withIdentifier: "MyCell") else {print("Create a new cell for row with index \(indexPath.row)")
+         var newCell = UITableViewCell(style: .default, reuseIdentifier: "MyCell")
+         //происходит конфигурация ячейки
+         var configuration = newCell.defaultContentConfiguration()
+         configure(cell: &newCell, for: indexPath)
+//            configuration.text = "Row \(indexPath.row)"
+//            newCell.contentConfiguration = configuration
+         return newCell
+     }
+     print("Use old cell for row with index \(indexPath.row)")
+     configure(cell: &cell, for: indexPath)
+     return cell
+ }
+}
+ */
+ 

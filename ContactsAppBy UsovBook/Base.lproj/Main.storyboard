@@ -28,7 +28,11 @@
                                 <rect key="frame" x="0.0" y="813" width="414" height="49"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="mpi-cA-Hwx"/>
-                                    <barButtonItem title="Create contact" id="ses-yD-qYX"/>
+                                    <barButtonItem title="Create contact" id="ses-yD-qYX">
+                                        <connections>
+                                            <action selector="showNewContactAlert" destination="BYZ-38-t0r" id="Phf-f8-Fct"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                         </subviews>
