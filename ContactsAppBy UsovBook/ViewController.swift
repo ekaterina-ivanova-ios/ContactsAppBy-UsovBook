@@ -2,6 +2,7 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
     private var contacts: [ContactProtocol] = [] {
         didSet {
             contacts.sort { $0.title < $1.title }
@@ -9,6 +10,7 @@ class ViewController: UIViewController {
     }
     
     @IBOutlet var tableView: UITableView!
+    
     
     @IBAction func showNewContactAlert() {
         //создание алерт контролера
@@ -49,6 +51,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadContacts()
+        //        для удобства обращения к UserDefaults.standard -- создали экземпляр со всеми существующими данными
+        var userDefaults = UserDefaults.standard
+        //userDefaults.set("some", forKey: "String")
+        //print(userDefaults.object(forKey: "String"))
+        
     }
 }
 
@@ -88,21 +95,21 @@ extension ViewController {
 extension ViewController {
     private func loadContacts() {
         contacts.append(
-        Contact(title: "Маникюр Света", phoneNumber: "+79001002021"))
+            Contact(title: "Маникюр Света", phoneNumber: "+79001002021"))
         contacts.append(
-        Contact(title: "Стилист Жанна", phoneNumber: "+79001002022"))
+            Contact(title: "Стилист Жанна", phoneNumber: "+79001002022"))
         contacts.append(
-        Contact(title: "Лор", phoneNumber: "+79001002030"))
+            Contact(title: "Лор", phoneNumber: "+79001002030"))
         contacts.append(
-        Contact(title: "Ветеринарка", phoneNumber: "+79001002040"))
+            Contact(title: "Ветеринарка", phoneNumber: "+79001002040"))
         contacts.append(
-        Contact(title: "Обои для ванной", phoneNumber: "+79301002021"))
+            Contact(title: "Обои для ванной", phoneNumber: "+79301002021"))
         contacts.append(
-        Contact(title: "Не отвечать", phoneNumber: "+79101002022"))
+            Contact(title: "Не отвечать", phoneNumber: "+79101002022"))
         contacts.append(
-        Contact(title: "Зубной", phoneNumber: "+79001202030"))
+            Contact(title: "Зубной", phoneNumber: "+79001202030"))
         contacts.append(
-        Contact(title: "Мамуля", phoneNumber: "+79001302040"))
+            Contact(title: "Мамуля", phoneNumber: "+79001302040"))
         contacts.sort{ $0.title < $1.title}
     }
 }
@@ -115,7 +122,7 @@ extension ViewController {
             tableView.reloadData()
         }
         let actions = UISwipeActionsConfiguration(actions: [actionDelete])
-    return actions
+        return actions
     }
 }
 
@@ -124,20 +131,20 @@ extension ViewController {
 /**
  //создание ячейки
  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-     //значение для параметра reuseIdentifier устанавливается на "contactCellIndetifier"(MyCell) для экономии ресурсов и использования возможности "переиспользования ячейки" и делаем проверку на наличие такой ячейки
-     guard var cell = tableView.dequeueReusableCell(withIdentifier: "MyCell") else {print("Create a new cell for row with index \(indexPath.row)")
-         var newCell = UITableViewCell(style: .default, reuseIdentifier: "MyCell")
-         //происходит конфигурация ячейки
-         var configuration = newCell.defaultContentConfiguration()
-         configure(cell: &newCell, for: indexPath)
-//            configuration.text = "Row \(indexPath.row)"
-//            newCell.contentConfiguration = configuration
-         return newCell
-     }
-     print("Use old cell for row with index \(indexPath.row)")
-     configure(cell: &cell, for: indexPath)
-     return cell
+ //значение для параметра reuseIdentifier устанавливается на "contactCellIndetifier"(MyCell) для экономии ресурсов и использования возможности "переиспользования ячейки" и делаем проверку на наличие такой ячейки
+ guard var cell = tableView.dequeueReusableCell(withIdentifier: "MyCell") else {print("Create a new cell for row with index \(indexPath.row)")
+ var newCell = UITableViewCell(style: .default, reuseIdentifier: "MyCell")
+ //происходит конфигурация ячейки
+ var configuration = newCell.defaultContentConfiguration()
+ configure(cell: &newCell, for: indexPath)
+ //            configuration.text = "Row \(indexPath.row)"
+ //            newCell.contentConfiguration = configuration
+ return newCell
  }
-}
+ print("Use old cell for row with index \(indexPath.row)")
+ configure(cell: &cell, for: indexPath)
+ return cell
+ }
+ }
  */
- 
+
