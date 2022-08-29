@@ -3,11 +3,16 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    var storage: ContactStorageProtocol!
+    
     private var contacts: [ContactProtocol] = [] {
         didSet {
             contacts.sort { $0.title < $1.title }
+            //сохранение контактов в хранилище
+            storage.save(contacts: contacts)
         }
     }
+    
     
     @IBOutlet var tableView: UITableView!
     
@@ -50,14 +55,12 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        storage = ContactStorage()
         loadContacts()
-        //        для удобства обращения к UserDefaults.standard -- создали экземпляр со всеми существующими данными
-        var userDefaults = UserDefaults.standard
-        //userDefaults.set("some", forKey: "String")
-        //print(userDefaults.object(forKey: "String"))
-        
     }
+
 }
+      
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     //метод определяет, какое кол-во ячеек будет в секции
@@ -94,23 +97,26 @@ extension ViewController {
 
 extension ViewController {
     private func loadContacts() {
-        contacts.append(
-            Contact(title: "Маникюр Света", phoneNumber: "+79001002021"))
-        contacts.append(
-            Contact(title: "Стилист Жанна", phoneNumber: "+79001002022"))
-        contacts.append(
-            Contact(title: "Лор", phoneNumber: "+79001002030"))
-        contacts.append(
-            Contact(title: "Ветеринарка", phoneNumber: "+79001002040"))
-        contacts.append(
-            Contact(title: "Обои для ванной", phoneNumber: "+79301002021"))
-        contacts.append(
-            Contact(title: "Не отвечать", phoneNumber: "+79101002022"))
-        contacts.append(
-            Contact(title: "Зубной", phoneNumber: "+79001202030"))
-        contacts.append(
-            Contact(title: "Мамуля", phoneNumber: "+79001302040"))
-        contacts.sort{ $0.title < $1.title}
+        //ввод через user default
+        contacts = storage.load()
+        //ручной ввод
+//        contacts.append(
+//            Contact(title: "Маникюр Света", phoneNumber: "+79001002021"))
+//        contacts.append(
+//            Contact(title: "Стилист Жанна", phoneNumber: "+79001002022"))
+//        contacts.append(
+//            Contact(title: "Лор", phoneNumber: "+79001002030"))
+//        contacts.append(
+//            Contact(title: "Ветеринарка", phoneNumber: "+79001002040"))
+//        contacts.append(
+//            Contact(title: "Обои для ванной", phoneNumber: "+79301002021"))
+//        contacts.append(
+//            Contact(title: "Не отвечать", phoneNumber: "+79101002022"))
+//        contacts.append(
+//            Contact(title: "Зубной", phoneNumber: "+79001202030"))
+//        contacts.append(
+//            Contact(title: "Мамуля", phoneNumber: "+79001302040"))
+//        contacts.sort{ $0.title < $1.title}
     }
 }
 
@@ -118,9 +124,11 @@ extension ViewController {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         //delete cell
         let actionDelete = UIContextualAction(style: .destructive, title: "Delete") { _,_,_ in
+            // удаляем контакт
             self.contacts.remove(at: indexPath.row)
             tableView.reloadData()
         }
+        // формируем экземпляр, описывающий доступные действия
         let actions = UISwipeActionsConfiguration(actions: [actionDelete])
         return actions
     }
@@ -148,3 +156,8 @@ extension ViewController {
  }
  */
 
+    /**        для удобства обращения к UserDefaults.standard -- создали экземпляр со всеми существующими данными (func viewDidLoad)
+    var userDefaults = UserDefaults.standard
+    userDefaults.set("some", forKey: "String")
+    print(userDefaults.object(forKey: "String"))
+     */

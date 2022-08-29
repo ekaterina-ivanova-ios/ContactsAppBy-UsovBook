@@ -44,7 +44,14 @@ class ContactStorage: ContactStorageProtocol {
     }
     
     func save(contacts: [ContactProtocol]) {
-        //var arrayForStorage: 
+        var arrayForStorage: [[String:String]] = []
+        contacts.forEach{ contact in
+            var newElementForStorage: Dictionary<String,String> = [:]
+            newElementForStorage[ContactKey.title.rawValue] = contact.title
+            newElementForStorage[ContactKey.phoneNumber.rawValue] = contact.phoneNumber
+            arrayForStorage.append(newElementForStorage)
+        }
+        storage.set(arrayForStorage, forKey: storageKey)
     }
     
     
